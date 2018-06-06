@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     //Variables
     var lastPoint:CGPoint!
     var isSwiping:Bool!
+    //Constants
+    //let model = someName()       //TODO
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,8 +74,26 @@ class ViewController: UIViewController {
     }
     
     @IBAction func decideBtnPressed(_ sender: UIButton) {
+        if imageView.image != nil {
+            makePrediction(image: imageView.image!)
+        } else {
+            predictionLabel.isHidden = false
+            predictionLabel.text = "Write A Character First!"
+        }
     }
     
+    func makePrediction(image: UIImage) {
+        /*
+         
+         guard let modelOutput = try? model.prediction(image) else {
+         fatalError("Unexpected runtime error.")
+         }
+         
+         predictionLabel.isHidden = false
+         predictionLabel.text = modelOutput.text
+         
+         */
+    }
 
 }
 
