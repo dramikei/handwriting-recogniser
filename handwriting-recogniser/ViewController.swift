@@ -68,6 +68,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func crearBtnPressed(_ sender: UIButton) {
+        imageView.image = nil
     }
     
     @IBAction func decideBtnPressed(_ sender: UIButton) {
