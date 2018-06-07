@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6806A6FD20C867A20023F89F /* HandRecogniser2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 6806A6FC20C867A20023F89F /* HandRecogniser2.mlmodel */; };
 		682B6B6120C79B8500E4FB89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682B6B6020C79B8500E4FB89 /* AppDelegate.swift */; };
 		682B6B6320C79B8500E4FB89 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682B6B6220C79B8500E4FB89 /* ViewController.swift */; };
 		682B6B6620C79B8500E4FB89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 682B6B6420C79B8500E4FB89 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6806A6FC20C867A20023F89F /* HandRecogniser2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = HandRecogniser2.mlmodel; sourceTree = "<group>"; };
 		682B6B5D20C79B8500E4FB89 /* handwriting-recogniser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "handwriting-recogniser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		682B6B6020C79B8500E4FB89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		682B6B6220C79B8500E4FB89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 		682B6B5F20C79B8500E4FB89 /* handwriting-recogniser */ = {
 			isa = PBXGroup;
 			children = (
+				6806A6FC20C867A20023F89F /* HandRecogniser2.mlmodel */,
 				682B6B6020C79B8500E4FB89 /* AppDelegate.swift */,
 				682B6B6220C79B8500E4FB89 /* ViewController.swift */,
 				682B6B6420C79B8500E4FB89 /* Main.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				682B6B6320C79B8500E4FB89 /* ViewController.swift in Sources */,
+				6806A6FD20C867A20023F89F /* HandRecogniser2.mlmodel in Sources */,
 				682B6B6120C79B8500E4FB89 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

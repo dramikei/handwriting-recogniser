@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreML
+import Vision
 
 class ViewController: UIViewController {
     
@@ -18,7 +20,8 @@ class ViewController: UIViewController {
     var lastPoint:CGPoint!
     var isSwiping:Bool!
     //Constants
-    //let model = someName()       //TODO
+    let model = try! VNCoreMLModel(for: HandRecogniser2().model)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,19 +84,38 @@ class ViewController: UIViewController {
             predictionLabel.text = "Write A Character First!"
         }
     }
+    func results(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNClassificationObservation]
+            else { fatalError("huh") }
+        
+        for classification in results {
+            if classification.confidence > 0.6 {
+                let identification = classification.identifier
+                self.predictionLabel.text = identification
+                break
+            }
+        }
+        
+    }
+    
+    func convertCIImageToCGImage(inputImage: CIImage) -> CGImage! {
+        let context = CIContext(options: nil)
+        return context.createCGImage(inputImage, from: inputImage.extent)
+    }
     
     func makePrediction(image: UIImage) {
-        /*
-         
-         guard let modelOutput = try? model.prediction(image) else {
-         fatalError("Unexpected runtime error.")
-         }
-         
-         predictionLabel.isHidden = false
-         predictionLabel.text = modelOutput.text
-         
-         */
+        let request = VNCoreMLRequest(model: model, completionHandler: results)
+        let handler = VNImageRequestHandler(cgImage:  convertCIImageToCGImage(inputImage: CIImage(image: image)!))
+        do {
+            try handler.perform([request])
+        }
+        catch {
+            fatalError("Huh")
+        }
+  
     }
-
+    
+    
+    
 }
 
