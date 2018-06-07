@@ -42,6 +42,7 @@ class ViewController: UIViewController {
             UIGraphicsBeginImageContext(imageView.frame.size)
             imageView.image?.draw(in: CGRect(x: 0, y: 0, width: imageView.frame.width, height: imageView.frame.height))
             let currentContext = UIGraphicsGetCurrentContext()
+            currentContext?.setFillColor(UIColor.white.cgColor)
             currentContext?.move(to: lastPoint)
             currentContext?.addLine(to: currentPoint)
             currentContext?.setLineCap(.round)
@@ -49,17 +50,19 @@ class ViewController: UIViewController {
             currentContext?.setStrokeColor(UIColor.black.cgColor)
             currentContext?.setAlpha(1)
             currentContext?.strokePath()
-            imageView.image = UIGraphicsGetImageFromCurrentImageContext()
+            overlayImages(img: UIGraphicsGetImageFromCurrentImageContext()!)
             UIGraphicsEndImageContext()
             lastPoint = currentPoint
         }
     }
+    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !isSwiping {
             UIGraphicsBeginImageContext(imageView.frame.size)
             imageView.image?.draw(in: CGRect(x: 0, y: 0, width: imageView.frame.width, height: imageView.frame.height))
             let currentContext = UIGraphicsGetCurrentContext()
+            currentContext?.setFillColor(UIColor.white.cgColor)
             currentContext?.setLineCap(.round)
             currentContext?.setLineWidth(9.0)
             currentContext?.setStrokeColor(UIColor.black.cgColor)
@@ -67,7 +70,7 @@ class ViewController: UIViewController {
             currentContext?.move(to: lastPoint)
             currentContext?.addLine(to: lastPoint)
             currentContext?.strokePath()
-            imageView.image = UIGraphicsGetImageFromCurrentImageContext()
+            overlayImages(img: UIGraphicsGetImageFromCurrentImageContext()!)
             UIGraphicsEndImageContext()
         }
     }
@@ -78,30 +81,38 @@ class ViewController: UIViewController {
     
     @IBAction func decideBtnPressed(_ sender: UIButton) {
         if imageView.image != nil {
+            predictionLabel.isHidden = false
             makePrediction(image: imageView.image!)
         } else {
             predictionLabel.isHidden = false
             predictionLabel.text = "Write A Character First!"
         }
     }
+    //Function processes results from MLModel and changes PredictionLabel text.
     func results(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNClassificationObservation]
-            else { fatalError("huh") }
+            else { fatalError("Error occured while procesing results from MLModel") }
         
         for classification in results {
+            //print(classification.identifier, classification.confidence)
             if classification.confidence > 0.6 {
-                let identification = classification.identifier
+                let identification = classification.identifier.replacingOccurrences(of: "_", with: "")
                 self.predictionLabel.text = identification
                 break
+            } else {
+                self.predictionLabel.text = "Cannot Decide :("
             }
         }
         
     }
     
+    //Converts CIImage to CGImage
     func convertCIImageToCGImage(inputImage: CIImage) -> CGImage! {
         let context = CIContext(options: nil)
         return context.createCGImage(inputImage, from: inputImage.extent)
     }
+    
+    //Function invoked when Decide Btn is pressed, makes the request to MLModel
     
     func makePrediction(image: UIImage) {
         let request = VNCoreMLRequest(model: model, completionHandler: results)
@@ -110,12 +121,29 @@ class ViewController: UIViewController {
             try handler.perform([request])
         }
         catch {
-            fatalError("Huh")
+            fatalError("Error has occured while performing the request to MLModel")
         }
   
     }
     
+    //Function to overlay Handwriting drawing on a white background
+    // (ML Model needs black drawing on a white background to work.)
     
-    
+    func overlayImages(img: UIImage) {
+        let bottomImage = UIImage(named: "bottom.png")
+        let topImage = img
+        
+        let size = CGSize(width: 300, height: 300)
+        UIGraphicsBeginImageContext(size)
+        
+        let areaSize = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        bottomImage!.draw(in: areaSize)
+        
+        topImage.draw(in: areaSize, blendMode: .normal, alpha: 1)
+        
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        imageView.image = newImage
+    }
 }
 
